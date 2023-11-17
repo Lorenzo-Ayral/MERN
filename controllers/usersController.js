@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt');
 // @access  Private
 const getAllUsers = asyncHandler(async (req, res) => {
     const users = await User.find().select('-password').lean();
-    if (!users) {
+    if (!users?.length) {
         return res.status(400).json({message: 'No users found'});
     }
     res.json(users);
@@ -34,7 +34,7 @@ const createNewUser = asyncHandler(async (req, res) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10); // salt rounds
 
-    const userObject = {username, "passsword": hashedPassword, roles};
+    const userObject = {username, "password": hashedPassword, roles};
 
     // Create and store new user
     const user = await User.create(userObject);
@@ -93,10 +93,10 @@ const deleteUser = asyncHandler(async (req, res) => {
         return res.status(400).json({message: 'User ID is required'});
     }
 
-    const notes = await Note.find({user: id}).lean.exec();
-    if (notes?.length) {
-        return res.status(400).json({message: 'User has assigned notes'});
-    }
+    // const note = await Note.findOne({user: id}).lean.exec();
+    // if (note) {
+    //     return res.status(400).json({message: 'User has assigned notes'});
+    // }
 
     const user = await User.findById(id).exec();
 
@@ -104,11 +104,11 @@ const deleteUser = asyncHandler(async (req, res) => {
         return res.status(400).json({message: 'User not found'});
     }
 
-    const result =  await user.deleteOne();
+    const result = await user.deleteOne();
 
     const reply = `Username ${result.username} with ID ${result._id} deleted`;
 
-    res.json({message: reply});
+    res.json(reply);
 })
 
 module.exports = {
