@@ -54,7 +54,7 @@ const updateUser = asyncHandler(async (req, res) => {
 
     // Confirm data
     if (!id || !username || !Array.isArray(roles) || !roles.length || typeof active !== 'boolean') {
-        return res.status(400).json({message: 'User ID is required'});
+        return res.status(400).json({message: 'All fields except password are required'});
     }
 
     const user = await User.findById(id).exec();
@@ -93,10 +93,10 @@ const deleteUser = asyncHandler(async (req, res) => {
         return res.status(400).json({message: 'User ID is required'});
     }
 
-    // const note = await Note.findOne({user: id}).lean.exec();
-    // if (note) {
-    //     return res.status(400).json({message: 'User has assigned notes'});
-    // }
+    const note = await Note.findOne({user: id}).lean.exec();
+    if (note) {
+        return res.status(400).json({message: 'User has assigned notes'});
+    }
 
     const user = await User.findById(id).exec();
 
