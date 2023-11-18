@@ -6,7 +6,7 @@ const asyncHandler = require('express-async-handler');
 // @route   GET /notes
 // @access  Private
 const getAllNotes = asyncHandler(async (req, res) => {
-    const notes = await Note.find().lean().exec();
+    const notes = await Note.find().lean();
 
     if (!notes?.length) {
         return res.status(400).json({message: 'No notes found'});
@@ -33,8 +33,9 @@ const createNewNote = asyncHandler(async (req, res) => {
 
     // Check duplicate
     const duplicate = await Note.findOne({title}).lean().exec();
+
     if (duplicate) {
-        return res.status(400).json({message: "Duplicate note title"});
+        return res.status(409).json({message: "Duplicate note title"});
 
     }
 
@@ -51,7 +52,7 @@ const createNewNote = asyncHandler(async (req, res) => {
 // @route   PATCH /notes
 // @access  Private
 const updateNote = asyncHandler(async (req, res) => {
-    const {id, user, title, text} = req.body;
+    const {id, user, title, text, completed} = req.body;
 
     if (!id || !user || !title || !text || typeof completed !== 'boolean') {
         return res.status(400).json({message : 'All fields are required'})
@@ -65,7 +66,7 @@ const updateNote = asyncHandler(async (req, res) => {
 
     const duplicate = await Note.findOne({title}).lean().exec();
 
-    if (duplicate && duplicate._id.toString() !== id) {
+    if (duplicate && duplicate?._id.toString() !== id) {
         return res.status(409).json({message: 'Duplicate title'})
     }
 
