@@ -1,12 +1,12 @@
 import './App.css'
 import {Routes, Route} from "react-router-dom";
-import Layout from "./assets/components/Layout.jsx";
-import Public from "./assets/components/Public.jsx";
-import Login from "./assets/features/auth/Login.jsx";
-import DashLayout from "./assets/components/DashLayout.jsx";
-import Welcome from "./assets/features/auth/Welcome.jsx";
-import NotesList from "./assets/features/notes/NotesList.jsx";
-import UsersList from "./assets/features/users/UsersList.jsx";
+import Layout from "./components/Layout.jsx";
+import Public from "./components/Public.jsx";
+import Login from "./features/auth/Login.jsx";
+import DashLayout from "./components/DashLayout.jsx";
+import Welcome from "./features/auth/Welcome.jsx";
+import NotesList from "./features/notes/NotesList.jsx";
+import UsersList from "./features/users/UsersList.jsx";
 
 function App() {
   return (
